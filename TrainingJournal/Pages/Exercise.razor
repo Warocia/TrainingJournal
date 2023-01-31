@@ -1,0 +1,60 @@
+﻿@page "/exercise"
+@inject IJSRuntime JsRuntime
+
+@using Blazored.Typeahead
+
+<PageTitle>Harjoituskerta</PageTitle>
+
+
+
+<table class="table">
+        <thead>
+            <tr>
+                <th>Nimi</th>
+                <th>Paino (kg)</th>
+                <th>Toistot</th>
+                <th>Toiminnot</th>
+            </tr>
+        </thead>
+        <tbody>
+        @if (workouts != null)
+        {
+            for (int i = 0; i < workouts.Count; i++)
+            {
+                var rowIndex = i;
+                var workout = workouts[i];
+
+                <tr @key="workout">
+                    <td>
+                        <BlazoredTypeahead 
+                                SearchMethod="FilterExercise"
+                                @bind-Value="@workout.Exercise" Debounce="5"
+                                placeholder="Etsi liike...">
+                            <SelectedTemplate>
+                                @context.Name
+                            </SelectedTemplate>
+                            <ResultTemplate>
+                                @context.Name
+                            </ResultTemplate>
+                            <NotFoundTemplate>
+                                Liikettä ei löydy...
+                            </NotFoundTemplate>
+                        </BlazoredTypeahead>
+                    </td>
+                    <td><input type="number" class="form-control" value="@workout.Weight" /></td>
+                    <td>@string.Join(",", workout.SetRepetition)</td>
+                        <td>
+                        <button class="btn btn-primary" @onclick="() => AddReps(workout)">Toisto</button>
+                        <button class="btn delete-button" @onclick="() => RemoveWorkout(workout)">Poista</button>
+                        </td>
+                 </tr>
+            }
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><button class="btn btn-primary" @onclick="AddNewWorkout">Uusi</button></td>
+        </tr>
+        </tbody>
+</table>
