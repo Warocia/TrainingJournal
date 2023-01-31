@@ -1,1 +1,1 @@
-# TrainingJournal
+Simple Blazor app
